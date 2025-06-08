@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 from contextlib import redirect_stdout
 
-from contact import add_new_contact, list_contacts, edit_contact
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact
 
 # Test Add New Contact
 class TestAddNewContact(unittest.TestCase):
@@ -81,6 +81,37 @@ class TestEditContact(unittest.TestCase):
         self.assertEqual(output.getvalue(), "Invalid contact!\n") 
     
 
+# Test Favorite and Unfavorite Contact
+class TestFavoriteContact(unittest.TestCase):
+    def setUp(self):
+        # Configuração inicial com 2 contatos
+        self.contacts = [
+            {"name": "Alice", "email": "alice@example.com", "phone": "1234", "isFavorite": False},
+            {"name": "Bob", "email": "bob@example.com", "phone": "5678", "isFavorite": True}
+        ]
+    
+    def test_favorite_added(self):
+        # Captura print
+        captured_output = StringIO()
+        sys.stdout = captured_output
+
+        favorite_contact(self.contacts, "1") 
+
+        sys.stdout = sys.__stdout__  
+
+        self.assertTrue(self.contacts[0]["isFavorite"], "Alice should now be favorite")
+        self.assertIn("Alice was added to favorites!", captured_output.getvalue())
+    
+    def test_favorite_removed(self):
+        captured_output = StringIO()
+        sys.stdout = captured_output
+
+        favorite_contact(self.contacts, "2")
+
+        sys.stdout = sys.__stdout__
+
+        self.assertFalse(self.contacts[1]["isFavorite"], "Bob should no longer be favorite")
+        self.assertIn("Bob was removed from favorites.", captured_output.getvalue())
 
 if __name__ == '__main__':
     unittest.main()

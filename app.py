@@ -1,5 +1,5 @@
 
-from contact import add_new_contact, list_contacts, edit_contact
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact
 
 contacts = [] 
 
@@ -35,6 +35,11 @@ while True:
             phone = input("New phone: ").strip() or None
 
             edit_contact(contacts, index, name, email, phone)
+        
+        case "4":
+            list_contacts(contacts)
+            index = input("Which contact do you want to favorite or unfavorite?")
+            favorite_contact(contacts, index)
         case "7":
             break
 
