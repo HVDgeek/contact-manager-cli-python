@@ -1,5 +1,5 @@
 
-from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts, delete_contact
 
 contacts = [] 
 
@@ -43,6 +43,10 @@ while True:
         
         case "5":
             list_favorite_contacts(contacts)
+        case "6":
+            list_contacts(contacts)
+            index = input("Which contact do you want to remove?")
+            delete_contact(contacts, index)
         case "7":
             break
 

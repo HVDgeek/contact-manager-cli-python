@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 from contextlib import redirect_stdout
 
-from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts, delete_contact
 
 # Test Add New Contact
 class TestAddNewContact(unittest.TestCase):
@@ -84,14 +84,12 @@ class TestEditContact(unittest.TestCase):
 # Test Favorite and Unfavorite Contact
 class TestFavoriteContact(unittest.TestCase):
     def setUp(self):
-        # Configuração inicial com 2 contatos
         self.contacts = [
             {"name": "Alice", "email": "alice@example.com", "phone": "1234", "isFavorite": False},
             {"name": "Bob", "email": "bob@example.com", "phone": "5678", "isFavorite": True}
         ]
     
     def test_favorite_added(self):
-        # Captura print
         captured_output = StringIO()
         sys.stdout = captured_output
 
@@ -151,6 +149,29 @@ class TestListFavoriteContacts(unittest.TestCase):
         output = captured_output.getvalue()
         self.assertIn("No favorite contacts found.", output)
 
+class TestDeleteContact(unittest.TestCase):
+    def setUp(self):
+        self.contacts = [
+            {"name": "Alice", "email": "alice@example.com", "phone": "1234", "isFavorite": True},
+            {"name": "Bob", "email": "bob@example.com", "phone": "5678", "isFavorite": False},
+            {"name": "Carol", "email": "carol@example.com", "phone": "9012", "isFavorite": True},
+        ]
+
+
+    def test_contact_removed(self):
+        captured_output = StringIO()
+        sys.stdout = captured_output
+
+        delete_contact(self.contacts, 2)
+
+        list_favorite_contacts(self.contacts)
+        sys.stdout = sys.__stdout__
+
+        output = captured_output.getvalue()
+        # Alice and Carol should be listed, Bob should NOT
+        self.assertIn("1. Alice --- alice@example.com --- 1234", output)
+        self.assertIn("2. Carol --- carol@example.com --- 9012", output)
+        self.assertNotIn("Bob", output)
 
 if __name__ == '__main__':
     unittest.main()

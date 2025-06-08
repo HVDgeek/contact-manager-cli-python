@@ -55,3 +55,14 @@ def list_favorite_contacts(contacts: List):
         email = contact["email"]
         phone = contact["phone"]
         print(f"{index}. {name} --- {email} --- {phone}")
+
+def delete_contact(contacts, contact_index):
+    index = int(contact_index) - 1
+
+    if 0 <= index < len(contacts):
+        contact = contacts[index]
+        contacts.remove(contact)
+        print("Contact was removed!")
+    else:
+        print("Invalid contact index. Please try again.")
+    return
