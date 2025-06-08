@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 from contextlib import redirect_stdout
 
-from contact import add_new_contact, list_contacts, edit_contact, favorite_contact
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts
 
 # Test Add New Contact
 class TestAddNewContact(unittest.TestCase):
@@ -112,6 +112,45 @@ class TestFavoriteContact(unittest.TestCase):
 
         self.assertFalse(self.contacts[1]["isFavorite"], "Bob should no longer be favorite")
         self.assertIn("Bob was removed from favorites.", captured_output.getvalue())
+
+
+class TestListFavoriteContacts(unittest.TestCase):
+    def setUp(self):
+        self.contacts = [
+            {"name": "Alice", "email": "alice@example.com", "phone": "1234", "isFavorite": True},
+            {"name": "Bob", "email": "bob@example.com", "phone": "5678", "isFavorite": False},
+            {"name": "Carol", "email": "carol@example.com", "phone": "9012", "isFavorite": True},
+        ]
+    
+    def test_lists_only_favorites(self):
+        captured_output = StringIO()
+        sys.stdout = captured_output
+
+        list_favorite_contacts(self.contacts)
+
+        sys.stdout = sys.__stdout__
+
+        output = captured_output.getvalue()
+        # Alice and Carol should be listed, Bob should NOT
+        self.assertIn("1. Alice --- alice@example.com --- 1234", output)
+        self.assertIn("2. Carol --- carol@example.com --- 9012", output)
+        self.assertNotIn("Bob", output)
+    
+    def test_no_favorites(self):
+        contacts_no_favorites = [
+            {"name": "Dave", "email": "dave@example.com", "phone": "3456", "isFavorite": False}
+        ]
+
+        captured_output = StringIO()
+        sys.stdout = captured_output
+
+        list_favorite_contacts(contacts_no_favorites)
+
+        sys.stdout = sys.__stdout__
+
+        output = captured_output.getvalue()
+        self.assertIn("No favorite contacts found.", output)
+
 
 if __name__ == '__main__':
     unittest.main()

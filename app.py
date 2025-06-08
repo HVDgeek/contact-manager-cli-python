@@ -1,5 +1,5 @@
 
-from contact import add_new_contact, list_contacts, edit_contact, favorite_contact
+from contact import add_new_contact, list_contacts, edit_contact, favorite_contact, list_favorite_contacts
 
 contacts = [] 
 
@@ -40,6 +40,9 @@ while True:
             list_contacts(contacts)
             index = input("Which contact do you want to favorite or unfavorite?")
             favorite_contact(contacts, index)
+        
+        case "5":
+            list_favorite_contacts(contacts)
         case "7":
             break
 

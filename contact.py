@@ -42,3 +42,16 @@ def favorite_contact(contacts, contact_index):
     else:
         print("Invalid contact index. Please try again.")
     return
+
+def list_favorite_contacts(contacts: List):
+    favorites = [c for c in contacts if c.get("isFavorite", False)]
+
+    if not favorites:
+        print("No favorite contacts found.")
+        return
+
+    for index, contact in enumerate(favorites, start=1):
+        name = contact["name"]
+        email = contact["email"]
+        phone = contact["phone"]
+        print(f"{index}. {name} --- {email} --- {phone}")
