@@ -1,0 +1,29 @@
+from typing import List, Optional
+
+def add_new_contact(contacts: List, name: str, email: str, phone: str): 
+    contact = {"name": name, "email": email, "phone": phone, "isFavorite": False}
+    contacts.append(contact)
+    print(f"Contact {name} was added!")
+    return
+
+def list_contacts(contacts: List):
+    for index, contact in enumerate(contacts, start=1):
+        status = "♥" if contact["isFavorite"] else "♡"
+        name = contact["name"]
+        email = contact["email"]
+        phone = contact["phone"]
+        print(f"{index}. [{status}] {name} --- {email} --- {phone}") 
+    return
+
+def edit_contact(contacts, contact_index, name:  Optional[str] = None, email: Optional[str] = None, phone:  Optional[str] = None):
+    index = int(contact_index) - 1
+
+    if 0 <= index < len(contacts):
+        contact = contacts[index]
+        updates = {"name": name, "email": email, "phone": phone}
+        for key, value in updates.items():
+            if value is not None:
+                contact[key] = value
+    else:
+        print("Invalid contact!")
+    return
